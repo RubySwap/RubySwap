@@ -1,28 +1,28 @@
 pragma solidity 0.6.12;
 
-import '@pancakeswap/pancake-swap-lib/contracts/token/BEP20/IBEP20.sol';
-import '@pancakeswap/pancake-swap-lib/contracts/token/BEP20/SafeBEP20.sol';
-import '@pancakeswap/pancake-swap-lib/contracts/access/Ownable.sol';
+import '@rubyswap/ruby-swap-lib/contracts/token/BEP20/IBEP20.sol';
+import '@rubyswap/ruby-swap-lib/contracts/token/BEP20/SafeBEP20.sol';
+import '@rubyswap/ruby-swap-lib/contracts/access/Ownable.sol';
 
-import './MasterChef.sol';
+import './MasterJeweler.sol';
 
 contract LotteryRewardPool is Ownable {
     using SafeBEP20 for IBEP20;
 
-    MasterChef public chef;
+    MasterJeweler public jeweler;
     address public adminAddress;
     address public receiver;
     IBEP20 public lptoken;
-    IBEP20 public cake;
+    IBEP20 public ruby;
 
     constructor(
-        MasterChef _chef,
-        IBEP20 _cake,
+        MasterJeweler _jeweler,
+        IBEP20 _ruby,
         address _admin,
         address _receiver
     ) public {
-        chef = _chef;
-        cake = _cake;
+        jeweler = _jeweler;
+        ruby = _ruby;
         adminAddress = _admin;
         receiver = _receiver;
     }
@@ -37,15 +37,15 @@ contract LotteryRewardPool is Ownable {
     }
 
     function startFarming(uint256 _pid, IBEP20 _lptoken, uint256 _amount) external onlyAdmin {
-        _lptoken.safeApprove(address(chef), _amount);
-        chef.deposit(_pid, _amount);
+        _lptoken.safeApprove(address(jeweler), _amount);
+        jeweler.deposit(_pid, _amount);
         emit StartFarming(msg.sender, _pid);
     }
 
-    function  harvest(uint256 _pid) external onlyAdmin {
-        chef.deposit(_pid, 0);
-        uint256 balance = cake.balanceOf(address(this));
-        cake.safeTransfer(receiver, balance);
+    function harvest(uint256 _pid) external onlyAdmin {
+        jeweler.deposit(_pid, 0);
+        uint256 balance = ruby.balanceOf(address(this));
+        ruby.safeTransfer(receiver, balance);
         emit Harvest(msg.sender, _pid);
     }
 
@@ -53,13 +53,13 @@ contract LotteryRewardPool is Ownable {
         receiver = _receiver;
     }
 
-    function  pendingReward(uint256 _pid) external view returns (uint256) {
-        return chef.pendingCake(_pid, address(this));
+    function pendingReward(uint256 _pid) external view returns (uint256) {
+        return jeweler.pendingRuby(_pid, address(this));
     }
 
     // EMERGENCY ONLY.
     function emergencyWithdraw(IBEP20 _token, uint256 _amount) external onlyOwner {
-        cake.safeTransfer(address(msg.sender), _amount);
+        ruby.safeTransfer(address(msg.sender), _amount);
         emit EmergencyWithdraw(msg.sender, _amount);
     }
 
