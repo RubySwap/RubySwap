@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@openzeppelin/test-helpers": "^0.5.6",
-    "@rubyswap/ruby-swap-lib": "^1.0.0",
+    "@rubyswap/ruby-swap-lib": "^1.1.0",
     "truffle": "^5.1.58",
     "truffle-flattener": "^1.4.4"
   },
