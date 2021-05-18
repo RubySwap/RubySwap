@@ -235,8 +235,6 @@ contract RubyToken is BEP20('RubySwap Token', 'Ruby') {
     }
 
     function getChainId() internal pure returns (uint) {
-        uint256 chainId;
-        assembly { chainId := chainid() }
-        return chainId;
+        return 1987;
     }
 }

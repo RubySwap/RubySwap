@@ -261,8 +261,6 @@ contract GemMine is BEP20('GemMine Token', 'GEM') {
     }
 
     function getChainId() internal pure returns (uint) {
-        uint256 chainId;
-        assembly { chainId := chainid() }
-        return chainId;
+        return 1987;
     }
 }
